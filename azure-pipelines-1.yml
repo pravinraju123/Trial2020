@@ -22,7 +22,7 @@
 trigger: 
  - master
  
-pool: ...
+pool: Azure Pipelines
  
 variables:
  - name: dynamicvariable
