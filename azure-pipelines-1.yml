@@ -1,0 +1,49 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+#trigger:
+#- main
+#
+#pool:
+  vmImage: ubuntu-latest
+#
+#steps:
+#- script: echo Hello, world!
+#  displayName: 'Run a one-line script'
+#
+#- script: |
+#    echo Add other tasks to build, test, and deploy your project.
+#    echo See https://aka.ms/yaml
+#  displayName: 'Run a multi-line script'
+#
+
+trigger: 
+ - master
+ 
+pool: ...
+ 
+variables:
+ - name: dynamicvariable
+   value: hyderabad
+stages:
+ - stage: stage1
+   jobs:
+    - job: 'set_a_variable'
+      steps:
+       - checkout: none
+       - bash: |
+          echo "##vso[task.setvariable variable=dynamicvariable]bangalore"
+         name: createvariable
+       - bash: |
+          echo $(dynamicvariable)
+ 
+    - job: 'print_variable'
+      variables:
+       dynamicvariable: $[ dependencies.set_a_variable.outputs['createvariable.dynamicvariable'] ]
+      dependsOn: 'set_a_variable'
+      steps:
+       - checkout: none
+       - bash: |
+          echo "dynamicvariable is $(dynamicvariable)"
